@@ -5,7 +5,7 @@ const Posts = require('../posts/postDb.js')
 const router = express.Router();
 
 
-
+//POST a user to the users
 router.post('/', validateUser, (req, res) => {
   // do your magic!
   Users.insert(req.body)
@@ -21,15 +21,14 @@ router.post('/', validateUser, (req, res) => {
   });
 });
 
+
+//POST a post to user by id
 router.post('/:id/posts', validateUserId, validatePost, (req, res) => {
   // do your magic!
-  const { id } = req.params.id;
-  const postInfo = {
-    
-    text: req.body.text,
-    user_id: id
-  }
-  Users.insert(postInfo)
+  
+  const postInfo = { ...req.body, user_id:req.params.id}
+  
+  Posts.insert(postInfo)
   .then(response => {
     res.status(201).json(response)
   })
@@ -56,6 +55,7 @@ router.get('/', (req, res) => {
     });
 });
 
+//GET user by id 
 router.get('/:id', validateUserId, (req, res) => {
   // do your magic!
   Users.getById(req.params.id)
@@ -71,6 +71,8 @@ router.get('/:id', validateUserId, (req, res) => {
   });
 });
 
+
+//GET posts by user id
 router.get('/:id/posts', validateUserId, (req, res) => {
   // do your magic!
   Posts.getById(req.params.id)
@@ -86,6 +88,8 @@ router.get('/:id/posts', validateUserId, (req, res) => {
   });
 });
 
+
+//DELETE user by id
 router.delete('/:id', validateUserId, (req, res) => {
   // do your magic!
   Users.remove(req.params.id)
@@ -102,6 +106,7 @@ router.delete('/:id', validateUserId, (req, res) => {
   });
 });
 
+//PUT update to user by id
 router.put('/:id', validateUserId, (req, res) => {
   // do your magic!
   const { id } = req.params;
@@ -133,7 +138,7 @@ function validateUserId(req, res, next) {
           next();
         }
         else {
-          res.status(400).json({ error: 'not valid' });
+          res.status(400).json({  message: "invalid user id" });
         }
       })
       .catch(err => {
