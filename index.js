@@ -2,6 +2,7 @@
 
 const server= require('./server.js')
 
-server.listen(4343, ()=> {
-    console.log('\n* Server Running on http://localhost:4343 *\n');
+const port = process.env.PORT || 4343;
+server.listen(port, ()=> {
+    console.log(`\n* Server Running on http://localhost:${port} *\n`);
 });
